@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/dmitryk-dk/form_phone/server/database"
+	"github.com/dmitryk-dk/from_phone/server/database"
 )
 
 type PhoneNumber struct {

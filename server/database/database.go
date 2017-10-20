@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/dmitryk-dk/form_phone/server/config"
-	"github.com/dmitryk-dk/form_phone/server/models"
+	"github.com/dmitryk-dk/from_phone/server/config"
+	"github.com/dmitryk-dk/from_phone/server/models"
 )
 
 var dbInstance *sql.DB

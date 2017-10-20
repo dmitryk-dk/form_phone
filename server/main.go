@@ -10,9 +10,9 @@ import (
 
 	"database/sql"
 
-	"github.com/dmitryk-dk/form_phone/server/config"
-	"github.com/dmitryk-dk/form_phone/server/database"
-	appHandlers "github.com/dmitryk-dk/form_phone/server/handlers"
+	"github.com/dmitryk-dk/from_phone/server/config"
+	"github.com/dmitryk-dk/from_phone/server/database"
+	appHandlers "github.com/dmitryk-dk/from_phone/server/handlers"
 	_ "github.com/go-sql-driver/mysql"
 )
 
