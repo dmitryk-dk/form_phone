@@ -2,12 +2,12 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 
 	"github.com/dmitryk-dk/from_phone/server/database"
+	"github.com/dmitryk-dk/from_phone/server/models"
 )
 
 type PhoneNumber struct {
@@ -15,27 +15,95 @@ type PhoneNumber struct {
 }
 
 func PostHandler(w http.ResponseWriter, r *http.Request) {
-	var phoneNumber *PhoneNumber
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Printf("parsing error: %v\n", err)
-		w.Write([]byte("error"))
+	dbHelper := &database.DbMethods{}
+	phone := &models.Phone{}
+
+	if r.Method == "POST" {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			//w.Write([]byte("error"))
+		}
+
+		if err = json.Unmarshal(body, phone); err != nil {
+			log.Println("Unmarshall error:", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			http.Error(w, "Wrong data", http.StatusInternalServerError)
+		}
+
+		err = dbHelper.AddPhone(phone)
+		if err != nil {
+			log.Println("DB Error:", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			http.Error(w, "Can't connect to DataBase", http.StatusInternalServerError)
+			//w.Write([]byte("error"))
+		}
+
+		w.Write([]byte("success"))
+	} else {
+		w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, "Used wrong method", http.StatusInternalServerError)
 	}
-	json.Unmarshal(body, &phoneNumber)
-	fmt.Println(phoneNumber)
-	w.Write([]byte("success"))
 }
 
 func GetHandler(w http.ResponseWriter, r *http.Request) {
-	var dbHelper database.DbMethodsHelper
-	dbHelper = &database.DbMethods{}
-	phones, err := dbHelper.GetPhones()
-	jsonPhones, err := json.Marshal(phones)
+	dbHelper := &database.DbMethods{}
 
-	if err != nil {
+	if r.Method == "GET" {
+
+		phones, err := dbHelper.GetPhones()
+		if err != nil {
+			log.Println("DB Error:", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			http.Error(w, "Can't connect to DataBase", http.StatusInternalServerError)
+		}
+
+		jsonPhones, err := json.Marshal(phones)
+		if err != nil {
+			log.Println("Marshal error:", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			http.Error(w, "Wrong data", http.StatusInternalServerError)
+		}
+
+		w.Write(jsonPhones)
+	} else {
 		w.WriteHeader(http.StatusInternalServerError)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, "Used wrong method", http.StatusInternalServerError)
 	}
+}
 
-	w.Write(jsonPhones)
+func DeleteHandler(w http.ResponseWriter, r *http.Request) {
+	dbHelper := &database.DbMethods{}
+	phone := &models.Phone{}
+
+	if r.Method == "DELETE" {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			//w.Write([]byte("error"))
+		}
+
+		if err = json.Unmarshal(body, phone); err != nil {
+			log.Println("Unmarshall error:", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			http.Error(w, "Wrong data", http.StatusInternalServerError)
+		}
+
+		err = dbHelper.DeletePhone(phone)
+		if err != nil {
+			log.Println("DB Error:", err)
+			w.WriteHeader(http.StatusInternalServerError)
+			http.Error(w, "Can't connect to DataBase", http.StatusInternalServerError)
+			//w.Write([]byte("error"))
+		}
+
+		w.Write([]byte("success"))
+	} else {
+		w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, "Used wrong method", http.StatusInternalServerError)
+	}
 }

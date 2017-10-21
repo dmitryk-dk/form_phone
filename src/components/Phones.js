@@ -3,14 +3,15 @@ import PhoneTable from './PhoneTable';
 import Form from './Form';
 
 export default ({
-    phoneNumbers,
-    submit
+    phones,
+    submit,
+    deletePhone
 }) => {
     return (
         <div className='app-wrapper'>
             <h1>Please enter phone number</h1>
             <Form submit={submit}/>
-            <PhoneTable phoneNumbers={phoneNumbers}/>
+            <PhoneTable phones={phones} deletePhone={deletePhone}/>
         </div>
     );
 }

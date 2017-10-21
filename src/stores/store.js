@@ -10,7 +10,7 @@ class AppStore extends ReduceStore {
     getInitialState () {
         return {
             errors: null,
-            phoneNumbers: [],
+            phones: [],
         };
     }
 
@@ -19,15 +19,23 @@ class AppStore extends ReduceStore {
             case actionTypes.APP_INIT:
                 return {
                     ...state,
-                    phoneNumbers: action.data
+                    phones: action.data
                 };
 
             case actionTypes.PHONE_SAVE_SUCCESS:
                 return {
                     ...state,
-                    phoneNumbers: [
-                        ...state.phoneNumbers,
-                        action.phoneNumber
+                    phones: [
+                        ...state.phones,
+                        action.phone
+                    ]
+                };
+
+            case actionTypes.PHONE_DELETE_SUCCESS:
+                return {
+                    ...state,
+                    phones: [
+                        ...state.phones.filter(phone => phone.number !== action.phone.number)
                     ]
                 };
 

@@ -12,3 +12,4 @@ build/
 dbconfig.json
 yarn.lock
 yarn-error.log
+.DS_Store

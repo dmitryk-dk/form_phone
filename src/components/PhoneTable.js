@@ -4,24 +4,31 @@ class PhoneTable extends Component {
 
     render() {
         return (
-            <table>
-                <tbody>
-                { this.tableBody() }
-                </tbody>
-            </table>
+            <div className="app-table-wrapper">
+                <table>
+                    <tbody>
+                    { this.tableBody() }
+                    </tbody>
+                </table>
+            </div>
+
         );
     }
 
     tableBody () {
-        const {phoneNumbers} = this.props;
+        const {phones, deletePhone} = this.props;
         return (
-            phoneNumbers.map(phoneNumber => (
+            phones.map((phone, i) => (
                 <tr>
+                    <td>{i}</td>
                     <td>
-                        {phoneNumber.number}
+                        {phone.number}
                     </td>
                     <td>
-                        <button className="app-button app-button_del">Delete Number</button>
+                        <button
+                            className="app-button app-button_del"
+                            onClick={() =>deletePhone(phone)}
+                        >Delete Number</button>
                     </td>
                 </tr>
             ))

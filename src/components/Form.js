@@ -15,7 +15,7 @@ class Form extends Component {
         const {number} = this.state;
         return (
             <form onSubmit={(event) => this.submit(event, this.state)}>
-                <label htmlFor="phone">
+                <label htmlFor="phone" className="app-phone_label">
                     <input
                         type="text"
                         value={number}
@@ -25,7 +25,7 @@ class Form extends Component {
                 </label>
                 <input
                     type="submit"
-                    value="Enter"
+                    value="Add"
                     className="app-button app-button_green"
                 />
                 <small className="help-text">Please use format phone number as 0675675678</small>
@@ -37,10 +37,10 @@ class Form extends Component {
         this.setState({number: event.target.value});
     }
 
-    submit (event, phoneNumber) {
+    submit (event, phone) {
         event.preventDefault();
         const {submit} = this.props;
-        submit(phoneNumber)
+        submit(phone)
     }
 }
 

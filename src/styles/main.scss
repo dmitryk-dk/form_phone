@@ -123,14 +123,26 @@ textarea {
       background-color: #CA4C3C;
     }
   }
+  &-table{
+    &-wrapper{
+      max-height: 400px;
+      overflow-y: scroll;
+    }
+  }
+  &-phone{
+    &_label{
+      margin-right: 40px;
+    }
+  }
 }
 .help {
   &-text {
     color: #787878;
     display: block;
     font-style: italic;
-    font-size: 8px;
+    font-size: 10px;
     line-height: 1.3;
+    max-width: 278px;
   }
 }
 form {
@@ -140,6 +152,9 @@ form {
 
 table {
   margin: 0 auto;
+  td {
+    padding: 10px;
+  }
 }
 .submit-button{
   background-color: red;

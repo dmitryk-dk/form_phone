@@ -36,8 +36,10 @@ func main() {
 
 	// handle get request
 	http.HandleFunc("/phones", appHandlers.GetHandler)
-	//handle get request
+	//handle post request
 	http.HandleFunc("/phone", appHandlers.PostHandler)
+	//handle delete request
+	http.HandleFunc("/delete", appHandlers.DeleteHandler)
 
 	// prepare server for shutdown
 	prepareShutdown(db)
