@@ -39,6 +39,7 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Can't connect to DataBase", http.StatusInternalServerError)
 		}
 
+		w.WriteHeader(http.StatusCreated)
 		w.Write([]byte("success"))
 	} else {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -65,6 +66,7 @@ func GetHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Wrong data", http.StatusInternalServerError)
 		}
 
+		w.WriteHeader(http.StatusOK)
 		w.Write(jsonPhones)
 	} else {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -97,6 +99,7 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Can't connect to DataBase", http.StatusInternalServerError)
 		}
 
+		w.WriteHeader(http.StatusNoContent)
 		w.Write([]byte("success"))
 	} else {
 		w.WriteHeader(http.StatusInternalServerError)
