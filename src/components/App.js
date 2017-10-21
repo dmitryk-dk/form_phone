@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { Container } from 'flux/utils';
-import PhoneTable from './PhoneTable';
-import Form from './Form';
-import appDispatcher from '../utils/dispatcher';
+import Phones from './Phones';
+
 
 // store
-import AppStore from '../stores/store';
-const appStore = new AppStore(appDispatcher);
+import appStore from '../stores/store';
 // actions
 import * as actions from '../actions/actions'
 
@@ -23,13 +21,11 @@ class App extends Component {
     }
 
     render() {
-        const {phoneNumbers} = this.state;
         return (
-            <div className='app-wrapper'>
-                <h1>Please enter phone number</h1>
-                <Form actions={actions}/>
-                <PhoneTable phoneNumbers={phoneNumbers}/>
-            </div>
+            <Phones
+                {...this.state}
+                {...actions}
+            />
         );
     }
 }

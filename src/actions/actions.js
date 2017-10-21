@@ -1,26 +1,32 @@
 import appDispatcher from '../utils/dispatcher';
 import * as http from '../utils/http';
-import {APP_INIT, APP_INIT_ERROR} from "./types";
+import * as actionTypes from "./types";
 import * as consts from '../utils/consts';
 
 export const submit = (phoneNumber) => {
     const url =  consts.host.replace('{API}', consts.postPhone);
     appDispatcher.dispatch({
-        type: '',
+        type: actionTypes.PHONE_SAVE_REQUSET,
     });
     http.post(url, phoneNumber)
-        .then(data => console.log(data))
-        .catch(reason => console.log(reason.message))
+        .then(data => appDispatcher.dispatch({
+            type: actionTypes.PHONE_SAVE_SUCCESS,
+            phoneNumber
+        }))
+        .catch(error => appDispatcher.dispatch({
+            type: actionTypes.PHONE_SAVE_FAILED,
+            error
+        }))
 };
 
 export const getData = (url) => {
     http.get(url)
         .then(data => appDispatcher.dispatch({
-            type: APP_INIT,
+            type: actionTypes.APP_INIT,
             data
         }))
         .catch(error => appDispatcher.dispatch({
-            type: APP_INIT_ERROR,
+            type: actionTypes.APP_INIT_ERROR,
             error
         }))
 };

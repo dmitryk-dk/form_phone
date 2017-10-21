@@ -1,10 +1,11 @@
 // utils
 import { ReduceStore } from 'flux/utils';
 // consts
-import { APP_INIT } from '../actions/types';
+import * as actionTypes from '../actions/types';
+import appDispatcher from '../utils/dispatcher';
 
 
-export default class AppStore extends ReduceStore {
+class AppStore extends ReduceStore {
 
     getInitialState () {
         return {
@@ -15,10 +16,19 @@ export default class AppStore extends ReduceStore {
 
     reduce (state, action) {
         switch (action.type) {
-            case APP_INIT:
+            case actionTypes.APP_INIT:
                 return {
                     ...state,
                     phoneNumbers: action.data
+                };
+
+            case actionTypes.PHONE_SAVE_SUCCESS:
+                return {
+                    ...state,
+                    phoneNumbers: [
+                        ...state.phoneNumbers,
+                        action.phoneNumber
+                    ]
                 };
 
             default:
@@ -27,4 +37,4 @@ export default class AppStore extends ReduceStore {
     };
 }
 
-
+export default new AppStore(appDispatcher);

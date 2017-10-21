@@ -35,9 +35,9 @@ func main() {
 	http.Handle("/", depHandler)
 
 	// handle get request
-	http.HandleFunc("/phoneNumbers", appHandlers.GetHandler)
+	http.HandleFunc("/phones", appHandlers.GetHandler)
 	//handle get request
-	http.HandleFunc("/post", appHandlers.PostHandler)
+	http.HandleFunc("/phone", appHandlers.PostHandler)
 
 	// prepare server for shutdown
 	prepareShutdown(db)

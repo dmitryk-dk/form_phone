@@ -2,23 +2,23 @@ import React, {Component} from 'react';
 
 class Form extends Component {
 
-    constructor () {
-        super();
+    constructor (props) {
+        super(props);
         this.state={
-            phoneNumber: ''
+            number: ''
         };
         this.change = this.change.bind(this);
+        this.submit = this.submit.bind(this);
     }
 
     render() {
-        const {submit} = this.props;
-        const {phoneNumber} = this.state;
+        const {number} = this.state;
         return (
-            <form onSubmit={() => submit(phoneNumber)}>
+            <form onSubmit={(event) => this.submit(event, this.state)}>
                 <label htmlFor="phone">
                     <input
                         type="text"
-                        value={phoneNumber}
+                        value={number}
                         id="phone"
                         onChange={this.change}
                     />
@@ -34,7 +34,13 @@ class Form extends Component {
     }
 
     change (event) {
-        this.setState({phoneNumber: event.target.value});
+        this.setState({number: event.target.value});
+    }
+
+    submit (event, phoneNumber) {
+        event.preventDefault();
+        const {submit} = this.props;
+        submit(phoneNumber)
     }
 }
 
