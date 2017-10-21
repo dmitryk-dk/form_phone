@@ -24,7 +24,6 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
-			//w.Write([]byte("error"))
 		}
 
 		if err = json.Unmarshal(body, phone); err != nil {
@@ -38,7 +37,6 @@ func PostHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println("DB Error:", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			http.Error(w, "Can't connect to DataBase", http.StatusInternalServerError)
-			//w.Write([]byte("error"))
 		}
 
 		w.Write([]byte("success"))
@@ -84,7 +82,6 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusInternalServerError)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
-			//w.Write([]byte("error"))
 		}
 
 		if err = json.Unmarshal(body, phone); err != nil {
@@ -98,7 +95,6 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 			log.Println("DB Error:", err)
 			w.WriteHeader(http.StatusInternalServerError)
 			http.Error(w, "Can't connect to DataBase", http.StatusInternalServerError)
-			//w.Write([]byte("error"))
 		}
 
 		w.Write([]byte("success"))
