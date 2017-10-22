@@ -40,7 +40,8 @@ class Form extends Component {
     submit (event, phone) {
         event.preventDefault();
         const {submit} = this.props;
-        submit(phone)
+        submit(phone);
+        this.setState({number: ''})
     }
 }
 
