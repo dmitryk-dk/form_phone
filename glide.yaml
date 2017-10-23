@@ -1,0 +1,4 @@
+package: github.com/dmitryk-dk/form_phone
+import:
+- package: github.com/go-sql-driver/mysql
+  version: v1.3

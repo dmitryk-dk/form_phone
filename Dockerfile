@@ -1,26 +1,22 @@
-FROM alpine:3.6
+FROM golang:1.9-alpine
 
-ENV HOME "/home/app/"
+WORKDIR "/home/app/"
 
-WORKDIR "${HOME}/src"
-
-RUN apk update \
-  && apk add curl bash tar \
-  # Yarn
-  && apk add yarn \
-  # GO
-  && curl https://storage.googleapis.com/golang/go1.8.linux-amd64.tar.gz | tar xzf - -C / && \
-     mv /go /goroot \
-  && rm -rf /var/cache/apk/*
-
-ENV GOROOT=/goroot \
-    GOPATH=${HOOME} \
-    GOBIN=${HOME}/bin \
-    PATH=${PATH}:/goroot/bin:${HOME}/bin
+RUN apk update && \
+    apk add git curl yarn && \
+    mkdir /opt && \
+    rm -rf /var/cache/apk/*
 
 COPY . .
 
-RUN rm -rf {node_modules,Dockerfile} && yarn install --non-interactive --silent
+RUN mkdir -p $GOPATH/src/github.com/dmitryk-dk/form_phone
+COPY . $GOPATH/src/github.com/dmitryk-dk/form_phone/
+
+RUN curl https://glide.sh/get | sh && \
+    glide i
+
+RUN rm -rf node_modules && \
+    yarn install --non-interactive --silent
 
 EXPOSE 3000
 

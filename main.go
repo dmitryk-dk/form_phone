@@ -1,4 +1,4 @@
-package main
+package form_phone
 
 import (
 	"fmt"
