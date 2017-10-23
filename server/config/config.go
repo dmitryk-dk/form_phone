@@ -6,9 +6,10 @@ import (
 	"log"
 	"reflect"
 	"sync"
+    "flag"
 )
 
-const (
+var (
 	dbConfigFile = "db-config.json"
 	uiConfigFile = "ui-config.json"
 )
@@ -44,6 +45,9 @@ func GetUIConfig() *UiConfig {
 }
 
 func readConfig(cfg interface{}) interface{} {
+    readFromFlags()
+
+    //
 	switch reflect.ValueOf(cfg).Interface().(type) {
 	case DBConfig:
 		db := new(DBConfig)
@@ -65,4 +69,18 @@ func readConfig(cfg interface{}) interface{} {
 		log.Fatalf("can't specify config file type: %s", cfg)
 	}
 	return nil
+}
+
+func readFromFlags()  {
+    dbCfg := flag.String("db-config", "db-config.json", "Path to DB config")
+    uiCfg := flag.String("ui-config", "ui-config.json", "Path to DB config")
+    flag.Parse()
+
+    if dbCfg != nil {
+        dbConfigFile = *dbCfg
+    }
+
+    if uiCfg != nil {
+        uiConfigFile = *uiCfg
+    }
 }
