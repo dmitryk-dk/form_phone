@@ -6,7 +6,7 @@ import * as actions from './actions/actions'
 import * as consts from './utils/consts';
 
 function init() {
-    const url = consts.host.replace('{API}', consts.getPhones);
+    const url = consts.getHostFn().replace('{API}', consts.getPhones);
     actions.getData(url);
     render(<App />,document.getElementById('app'));
 }

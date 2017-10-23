@@ -4,7 +4,7 @@ import * as actionTypes from "./types";
 import * as consts from '../utils/consts';
 
 export const submit = (phone) => {
-    const url =  consts.host.replace('{API}', consts.postPhone);
+    const url =  consts.getHostFn().replace('{API}', consts.postPhone);
     appDispatcher.dispatch({
         type: actionTypes.PHONE_SAVE_REQUEST,
     });
@@ -32,7 +32,7 @@ export const getData = (url) => {
 };
 
 export const deletePhone = (phone) => {
-    const url =  consts.host.replace('{API}', consts.delPhone);
+    const url =  consts.getHostFn().replace('{API}', consts.delPhone);
     appDispatcher.dispatch({
         type: actionTypes.PHONE_DELETE_REQUEST,
     });
