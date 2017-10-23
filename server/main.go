@@ -22,9 +22,10 @@ func dependenciesHandler() http.Handler {
 
 func main() {
 	// listening port
+	log.SetFlags(log.Lshortfile|log.LstdFlags)
 	const port = "3000"
-	cfg := config.GetConfig()
-	db, err := database.Connect(cfg)
+	dbCfg := config.GetDBConfig()
+	db, err := database.Connect(dbCfg)
 	if err != nil {
 		log.Fatalf("Error when connecting to DB %s", err)
 	}
@@ -40,6 +41,8 @@ func main() {
 	http.HandleFunc("/phone", appHandlers.PostHandler)
 	//handle delete request
 	http.HandleFunc("/delete", appHandlers.DeleteHandler)
+	// ui config
+	http.HandleFunc("/uiConfig", appHandlers.UiConfigHandler)
 
 	// prepare server for shutdown
 	prepareShutdown(db)
