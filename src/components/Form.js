@@ -41,7 +41,6 @@ class Form extends Component {
         event.preventDefault();
         const {submit} = this.props;
         submit(phone);
-        this.setState({number: ''})
     }
 }
 
