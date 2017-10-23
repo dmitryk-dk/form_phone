@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/dmitryk-dk/form_phone/server/config"
 	"github.com/dmitryk-dk/form_phone/server/database"
 	"github.com/dmitryk-dk/form_phone/server/models"
-    "github.com/dmitryk-dk/form_phone/server/config"
 )
 
 type PhoneNumber struct {
@@ -111,11 +111,11 @@ func DeleteHandler(w http.ResponseWriter, r *http.Request) {
 func UiConfigHandler(w http.ResponseWriter, r *http.Request) {
 	conf := config.GetUIConfig()
 	content, err := json.Marshal(conf)
-    if err != nil {
-        w.WriteHeader(http.StatusInternalServerError)
-        w.Write([]byte(err.Error()))
-        return
-    }
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
 	w.WriteHeader(http.StatusOK)
 	w.Write(content)
 }

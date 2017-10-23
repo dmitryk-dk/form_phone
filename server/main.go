@@ -9,11 +9,11 @@ import (
 	"syscall"
 
 	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/dmitryk-dk/form_phone/server/config"
 	"github.com/dmitryk-dk/form_phone/server/database"
 	appHandlers "github.com/dmitryk-dk/form_phone/server/handlers"
-	_ "github.com/go-sql-driver/mysql"
 )
 
 func dependenciesHandler() http.Handler {
@@ -21,8 +21,9 @@ func dependenciesHandler() http.Handler {
 }
 
 func main() {
+	log.SetFlags(log.Lshortfile | log.LstdFlags)
+
 	// listening port
-	log.SetFlags(log.Lshortfile|log.LstdFlags)
 	const port = "3000"
 	dbCfg := config.GetDBConfig()
 	db, err := database.Connect(dbCfg)

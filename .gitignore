@@ -9,7 +9,8 @@ out
 gen
 node_modules/
 build/
-dbconfig.json
+db-config.json
+ui-config.json
 yarn.lock
 yarn-error.log
 .DS_Store
