@@ -3,22 +3,26 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"log"
+	"sync"
 
-	"github.com/dmitryk-dk/from_phone/server/config"
-	"github.com/dmitryk-dk/from_phone/server/models"
+	"github.com/dmitryk-dk/form_phone/server/config"
+	"github.com/dmitryk-dk/form_phone/server/models"
 )
 
 var dbInstance *sql.DB
+var once sync.Once
 
-func Connect(config *config.Config) (*sql.DB, error) {
-	if dbInstance == nil {
+func Connect(config *config.DBConfig) (*sql.DB, error) {
+	once.Do(func() {
+		fmt.Printf("%#v", config)
 		connectionConfig := fmt.Sprintf("%s:%s@%s/%s", config.User, config.Password, config.Host, config.DbName)
 		db, err := sql.Open(config.DbDriverName, connectionConfig)
 		if err != nil {
-			return nil, err
+			log.Fatalf("couldn't connect to database: %s", err)
 		}
 		dbInstance = db
-	}
+	})
 	return dbInstance, nil
 }
 

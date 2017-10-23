@@ -2,11 +2,19 @@ package config
 
 import (
 	"encoding/json"
-	"flag"
 	"io/ioutil"
+	"log"
+	"reflect"
+	"sync"
+    "flag"
 )
 
-type Config struct {
+var (
+	dbConfigFile = "db-config.json"
+	uiConfigFile = "ui-config.json"
+)
+
+type DBConfig struct {
 	User         string `json:"user"`
 	Password     string `json:"password"`
 	Host         string `json:"host"`
@@ -14,27 +22,65 @@ type Config struct {
 	DbDriverName string `json:"dbDriver"`
 }
 
-var config *Config
+type UiConfig map[string]interface{}
 
-func GetConfig () *Config {
-	if config == nil {
-		config = new(Config).readConfig()
-	}
+var config *DBConfig
+var uiConfig *UiConfig
+
+var dbCfgOnce sync.Once
+var uiCfgOnce sync.Once
+
+func GetDBConfig() *DBConfig {
+	dbCfgOnce.Do(func() {
+		config = readConfig(DBConfig{}).(*DBConfig)
+	})
 	return config
 }
 
-func (c Config) readConfig() (*Config) {
-	flagName := c.readFlags()
-	file, err := ioutil.ReadFile(*flagName)
-	err = json.Unmarshal(file, &config)
-	if err != nil {
-		return nil
-	}
-	return config
+func GetUIConfig() *UiConfig {
+	uiCfgOnce.Do(func() {
+		uiConfig = readConfig(UiConfig{}).(*UiConfig)
+	})
+	return uiConfig
 }
 
-func (c Config) readFlags () (configFile *string) {
-	configFile = flag.String("dbconfig", "dbconfig.json", "Path to config file")
-	flag.Parse()
-	return
+func readConfig(cfg interface{}) interface{} {
+    readFromFlags()
+
+    //
+	switch reflect.ValueOf(cfg).Interface().(type) {
+	case DBConfig:
+		db := new(DBConfig)
+		f, err := ioutil.ReadFile(dbConfigFile)
+		err = json.Unmarshal(f, db)
+		if err != nil {
+			log.Fatalf("read DB config error: %s, %#v", err, db)
+		}
+		return db
+	case UiConfig:
+		ui := new(UiConfig)
+		f, err := ioutil.ReadFile(uiConfigFile)
+		err = json.Unmarshal(f, ui)
+		if err != nil {
+			log.Fatalf("read UI config error: %s, %#v", err, ui)
+		}
+		return ui
+	default:
+		log.Fatalf("can't specify config file type: %s", cfg)
+	}
+	return nil
+}
+
+func readFromFlags()  {
+    dbCfg := flag.String("db-config", "db-config.json", "Path to DB config")
+    uiCfg := flag.String("ui-config", "ui-config.json", "Path to DB config")
+    flag.Parse()
+
+    if dbCfg != nil {
+        dbConfigFile = *dbCfg
+    }
+
+    if uiCfg != nil {
+        uiConfigFile = *uiCfg
+    }
 }
