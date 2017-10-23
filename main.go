@@ -16,15 +16,18 @@ import (
 	appHandlers "github.com/dmitryk-dk/form_phone/server/handlers"
 )
 
+const (
+	staticDir = "./build/"
+	listen    = ":3000"
+)
+
 func dependenciesHandler() http.Handler {
-	return http.StripPrefix("/", http.FileServer(http.Dir("../build/")))
+	return http.StripPrefix("/", http.FileServer(http.Dir(staticDir)))
 }
 
 func main() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
 
-	// listening port
-	const port = "3000"
 	dbCfg := config.GetDBConfig()
 	db, err := database.Connect(dbCfg)
 	if err != nil {
@@ -48,8 +51,8 @@ func main() {
 	// prepare server for shutdown
 	prepareShutdown(db)
 
-	fmt.Printf("Running server on port: %s\n Type Ctr-c to shutdown server.\n", port)
-	http.ListenAndServe(":"+port, nil)
+	fmt.Printf("Running server on port: %s\n Type Ctr-c to shutdown server.\n", listen)
+	http.ListenAndServe(listen, nil)
 }
 
 func prepareShutdown(db *sql.DB) {

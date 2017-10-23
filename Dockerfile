@@ -1,21 +1,22 @@
 FROM golang:1.9-alpine
 
-WORKDIR "/home/app/"
+ENV GOPATH="/home/app"
+ENV PATH=$PATH:$GOPATH/bin
 
+WORKDIR "$GOPATH/src/github.com/dmitryk-dk/form_phone"
+
+RUN mkdir $GOPATH/bin
 RUN apk update && \
     apk add git curl yarn && \
-    mkdir /opt && \
     rm -rf /var/cache/apk/*
 
 COPY . .
-
-RUN go get -v -t -u -d github.com/dmitryk-dk/form_phone
 
 RUN curl https://glide.sh/get | sh && \
     glide i
 
 RUN rm -rf node_modules && \
-    yarn install --non-interactive --silent
+    yarn install --non-interactive --silent && \
     yarn build
 
 EXPOSE 3000
