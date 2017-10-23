@@ -1,18 +1,20 @@
 import React, {Component} from 'react';
+import {validate} from "../utils/validator";
 
 class Form extends Component {
 
     constructor (props) {
         super(props);
         this.state={
-            number: ''
+            number: '',
+            hasError: false,
         };
         this.change = this.change.bind(this);
         this.submit = this.submit.bind(this);
     }
 
     render() {
-        const {number} = this.state;
+        const {number, hasError} = this.state;
         return (
             <form onSubmit={(event) => this.submit(event, this.state)}>
                 <label htmlFor="phone" className="app-phone_label">
@@ -20,6 +22,7 @@ class Form extends Component {
                         type="text"
                         value={number}
                         id="phone"
+                        className={hasError ? 'app-phone_error': ''}
                         onChange={this.change}
                     />
                 </label>
@@ -28,7 +31,15 @@ class Form extends Component {
                     value="Add"
                     className="app-button app-button_green"
                 />
-                <small className="help-text">Please use format phone number as 0675675678</small>
+                {
+                    hasError ?
+                        <small className="help-text_error">
+                            Wrong format number. Example: 0675675678.
+                        </small>
+                        :
+                        <small className="help-text">Please use format phone number as 0675675678</small>
+                }
+
             </form>
         );
     }
@@ -40,7 +51,14 @@ class Form extends Component {
     submit (event, phone) {
         event.preventDefault();
         const {submit} = this.props;
-        submit(phone);
+        const {number} = this.state;
+        if (validate(number)) {
+            this.setState({hasError: false});
+            submit(phone);
+        } else {
+            this.setState({hasError: true});
+        }
+
     }
 }
 
